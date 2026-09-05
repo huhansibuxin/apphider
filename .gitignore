@@ -1,0 +1,5 @@
+# Theos 构建产物
+.theos/
+*.deb
+*.dylib
+obj/
