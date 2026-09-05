@@ -13,41 +13,30 @@ GitHub Actions 自动出 **rootless + roothide 双版本** `.deb`（`matrix: [ro
 
 push 后到 Actions 看构建，下载 Artifact 里的 `.deb`。
 
+## 依赖
+
+- **ellekit**（hook 引擎）
+- **AltList**（`com.opa334.altlist`）：设置面板的「选择要隐藏的 App」用的是 AltList 的原生应用多选列表（`ATLApplicationListMultiSelectionController`，bundleless 用法，无需自定义 .bundle）。AltList 的枚举发生在你**打开选择器时**（Settings 进程内），SpringBoard 侧完全不枚举、零开销。
+
 ## 安装（TrollFools）
 
-1. 下载对应版本的 `.deb`（roothide 设备选 roothide 变体）。
-2. TrollFools 注入 `com.apple.springboard`（主屏）。
-3. respring 生效。
+1. 先在 Sileo/Zebra 装好 **AltList**（依赖自动拉，但建议确认已装）。
+2. 下载对应版本 `.deb`（roothide 设备选 roothide 变体）。
+3. TrollFools 注入 `com.apple.springboard`（主屏）。
+4. respring。
 
-## 隐藏某个 App
+## 隐藏某个 App（走设置 UI）
 
-编辑设备上的 `/var/mobile/Library/Preferences/com.huhansibuxin.apphider.plist`：
+1. 打开 iOS **设置 → AppHider → 选择要隐藏的 App**。
+2. 在列表里勾选要隐藏的 App（顶部可搜索；副标题显示 bundle id）。
+3. 返回、respring。被勾选的 App 图标即从主屏消失。
 
-```xml
-<dict>
-    <key>apps</key>
-    <array>
-        <string>com.tencent.wetype</string>
-    </array>
-    <key>debug</key>
-    <false/>
-</dict>
-```
-
-改完在终端 post Darwin 通知热重载（无需 respring）：
-
-```sh
-# 设备上（或 ssh）
-killall -SIGUSR1 不需要; # 实际用:
-# 通过 notify_post 触发，或简单 respring:
-sbreload   # 或 killall backboardd
-```
-
-> 简化：直接 respring 最稳。debug=1 时会在 `/var/mobile/Documents/apphider_debug.log` 记录每次命中隐藏，方便验证 hook 是否生效。
+> 隐藏列表以 **bundle id 数组** 存于 `/var/mobile/Library/Preferences/com.huhansibuxin.apphider.plist` 的 `apps` 键。
+> 改完建议 respring 让 SpringBoard 重新布局生效。
 
 ## 调试（验证 hook 命中）
 
-把 plist 的 `debug` 设为 `1`（或 `true`），respring，然后：
+设置里打开「诊断日志（debug）」，respring，然后：
 
 ```sh
 ssh root@<设备> 'cat /var/mobile/Documents/apphider_debug.log'
@@ -58,4 +47,4 @@ ssh root@<设备> 'cat /var/mobile/Documents/apphider_debug.log'
 
 ## 合并进 airpods-volume
 
-`Tweak.xm` 中标记了「可移植片段」（⬇⬇⬇ / ⬆⬆⬆ 之间）：把两段 `%hook` + `AHReloadHiddenApps()` + `%ctor` 里的通知注册整段复制进 airpods-volume 的 SB hook 文件即可，零新增依赖、零新增注入目标。
+`Tweak.xm` 中标记了「可移植片段」（⬇⬇⬇ / ⬆⬆⬆ 之间）：把两段 `%hook` + `AHReloadHiddenApps()` + `%ctor` 里的通知注册整段复制进 airpods-volume 的 SB hook 文件即可，零新增依赖、零新增注入目标。本设置面板（含 AltList 依赖）也可直接复用。

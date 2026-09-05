@@ -1,6 +1,6 @@
 Package: com.huhansibuxin.apphider
 Name: AppHider
-Depends: ellekit
+Depends: ellekit, com.opa334.altlist
 Version: 1.0.0
 Architecture: iphoneos-arm64
 Description: Minimal app-icon hider for SpringBoard (rootless/roothide). Hide apps by bundle id listed in prefs.

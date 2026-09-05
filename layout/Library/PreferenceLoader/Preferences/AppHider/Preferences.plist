@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>entry</key>
+	<dict>
+		<key>cell</key>
+		<string>PSLinkCell</string>
+		<key>label</key>
+		<string>AppHider</string>
+	</dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>隐藏应用</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>label</key>
+			<string>选择要隐藏的 App</string>
+			<key>detail</key>
+			<string>ATLApplicationListMultiSelectionController</string>
+			<key>key</key>
+			<string>apps</string>
+			<key>default</key>
+			<array/>
+			<key>defaults</key>
+			<string>com.huhansibuxin.apphider</string>
+			<key>PostNotification</key>
+			<string>com.huhansibuxin.apphider/reload</string>
+			<key>sections</key>
+			<array>
+				<dict>
+					<key>sectionType</key>
+					<string>Visible</string>
+				</dict>
+			</array>
+			<key>useSearchBar</key>
+			<true/>
+			<key>showIdentifiersAsSubtitle</key>
+			<true/>
+			<key>defaultApplicationSwitchValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>点进「选择要隐藏的 App」，勾选你想隐藏的 App 即可（列表/枚举由 AltList 在你打开选择器时才做，SpringBoard 不枚举、零开销）。改完请 respring（注销主屏）生效——图标可见性在 SpringBoard 重新布局时才重新计算。
+
+合并进 airpods-volume 时，只需把 Tweak.xm 中标注「可移植片段」的部分并入其 SB hook 文件，本设置面板可直接复用（依赖 AltList）。</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>调试</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>诊断日志（debug）</string>
+			<key>key</key>
+			<string>debug</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.huhansibuxin.apphider</string>
+			<key>PostNotification</key>
+			<string>com.huhansibuxin.apphider/reload</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>打开「诊断日志」后，隐藏命中会写入 /var/mobile/Documents/apphider_debug.log（SSH: cat /var/mobile/Documents/apphider_debug.log），看到 hide(model/ctrl) xxx 即说明隐藏生效。平时请关闭。</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>AppHider</string>
+</dict>
+</plist>
